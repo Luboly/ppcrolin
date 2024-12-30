@@ -440,12 +440,21 @@
         function getSimpleDrawingDots(callback) {
             var image = new Image();
             image.onload = function () {
-                var newWidth = shapeCanvas.width / 2;  // 将宽度缩小为原来的一半，可根据实际需求调整缩放比例
-                var newHeight = shapeCanvas.height / 2; // 同理高度也缩小为原来的一半
+                var scale = Math.min(shapeCanvas.width / this.width, shapeCanvas.height / this.height);  // 计算合适的缩放比例，确保能完整显示在画布内
+                var newWidth = this.width * scale;
+                var newHeight = this.height * scale;
                 shapeContext.clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
-                shapeContext.drawImage(this, 0, 0, newWidth, newHeight);  // 可根据实际调整绘制尺寸参数
+                shapeContext.drawImage(this, 0, 0, newWidth, newHeight);
+
+                // 获取图像数据，直接使用绘制后的图像数据，无需处理白色背景了
+                var imageData = shapeContext.getImageData(0, 0, newWidth, newHeight);
+                var data = imageData.data;
+
+                // 将处理后的图像数据放回画布（这里其实就是直接放回原绘制后的图像数据了）
+                shapeContext.putImageData(imageData, 0, 0);
+
                 callback(processCanvas());
-            };
+                };
             image.src ='pp_2.png';
         }
         // Init
