@@ -384,7 +384,7 @@
         }
     };
     S.ShapeBuilder = (function () {
-        var gap = 20,
+        var gap = 13,
             shapeCanvas = document.createElement('canvas'),
             shapeContext = shapeCanvas.getContext('2d'),
             fontSize = 500,
@@ -440,8 +440,10 @@
         function getSimpleDrawingDots(callback) {
             var image = new Image();
             image.onload = function () {
+                var newWidth = shapeCanvas.width / 2;  // 将宽度缩小为原来的一半，可根据实际需求调整缩放比例
+                var newHeight = shapeCanvas.height / 2; // 同理高度也缩小为原来的一半
                 shapeContext.clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
-                shapeContext.drawImage(this, 0, 0, shapeCanvas.width, shapeCanvas.height);  // 可根据实际调整绘制尺寸参数
+                shapeContext.drawImage(this, 0, 0, newWidth, newHeight);  // 可根据实际调整绘制尺寸参数
                 callback(processCanvas());
             };
             image.src ='pp_2.png';
