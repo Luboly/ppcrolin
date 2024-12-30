@@ -123,7 +123,7 @@
             document.body.classList.add('body--ready');
             // 想说的话
             setTimeout(function () {
-                S.UI.simulate("#time|#countdown 3|希望飘飘|2025|天天开心|心想事成！");
+                S.UI.simulate("#time|#countdown 3|希望飘飘|2025|天天开心|万事顺遂！|#circle 12|#time");
             }, 3000);
 
             // S.UI.simulate("希望飘飘|2025|天天开心|心想事成！|#countdown 3|#time");
@@ -246,9 +246,10 @@
                         S.Shape.switchShape(S.ShapeBuilder.rectangle(Math.min(maxShapeSize, parseInt(value[0])), Math.min(maxShapeSize, parseInt(value[1]))));
                         break;
                     case 'circle':
+                        // 原先是画圆逻辑，修改为调用生成爱心点阵的函数
                         value = parseInt(value) || maxShapeSize;
                         value = Math.min(value, maxShapeSize);
-                        S.Shape.switchShape(S.ShapeBuilder.circle(value));
+                        S.Shape.switchShape(S.ShapeBuilder.heart());
                         break;
                     case 'time':
                         var t = formatTime(new Date());
@@ -439,6 +440,28 @@
             fit();
             window.addEventListener('resize', fit);
         }
+        // 新增生成爱心点阵的函数
+        function heart() {
+            shapeContext.clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
+
+            // 利用简单的爱心曲线方程来绘制爱心形状（这里是简化示例，可优化）
+            for (var x = 0; x < shapeCanvas.width; x += gap) {
+                for (var y = 0; y < shapeCanvas.height; y += gap) {
+                    var dx = x - shapeCanvas.width / 2;
+                    var dy = y - shapeCanvas.height / 2;
+                    var distance = Math.sqrt(dx * dx + dy * dy);
+                    var heartEquation = Math.pow(dx / (shapeCanvas.width / 4), 2) + Math.pow(dy / (shapeCanvas.height / 4), 2) - 1;
+                    if (heartEquation <= 0) {
+                        dots.push(new S.Point({
+                            x: x,
+                            y: y
+                        }));
+                    }
+                }
+            }
+    
+            return processCanvas();
+        }
         // 新增获取简笔画点阵数据函数（示例，假设从图像获取）
         function getSimpleDrawingDots(callback) {
             var image = new Image();
@@ -464,6 +487,20 @@
         init();
         return {
             getSimpleDrawingDots: getSimpleDrawingDots,
+            imageFile: function (url, callback) {
+                var image = new Image(),
+                    a = S.Drawing.getArea();
+                image.onload = function () {
+                    shapeContext.clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
+                    shapeContext.drawImage(this, 0, 0, a.h * 0.6, a.h * 0.6);
+                    callback(processCanvas());
+                };
+                image.onerror = function () {
+                    callback(S.ShapeBuilder.letter('What?'));
+                };
+                image.src = url;
+            },
+            heart: heart,  // 对外暴露生成爱心点阵的函数
             imageFile: function (url, callback) {
                 var image = new Image(),
                     a = S.Drawing.getArea();
