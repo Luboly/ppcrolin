@@ -121,16 +121,12 @@
         init: function () {
             S.Drawing.init('.canvas');
             document.body.classList.add('body--ready');
-            // 先执行文字点阵图生成逻辑，传入回调函数用于在文字点阵图相关操作完成后再执行简笔画点阵图生成逻辑
-            S.UI.simulate("希望飘飘|2025|天天开心|心想事成！|#countdown 3|#time", function () {
-                try{// 文字点阵图相关操作完成后的回调函数，在这里获取简笔画点阵数据并展示
-                    S.ShapeBuilder.getSimpleDrawingDots(function (dotsData) {
-                        S.Shape.switchShape(dotsData);
-                    });
-                }
-                catch (error) {
-                    console.error('在获取简笔画点阵图时出错：', error);
-                }
+             // 先获取简笔画点阵数据并展示
+            
+            // 想说的话
+            S.UI.simulate("希望飘飘|2025|天天开心|心想事成！|#countdown 3|#time");
+            S.ShapeBuilder.getSimpleDrawingDots(function (dotsData) {
+                S.Shape.switchShape(dotsData);
             });
             S.Drawing.loop(function () {
                 S.Shape.render();
@@ -217,7 +213,7 @@
                 }, delay);
             }
         }
-        function performAction(value, callback) {
+        function performAction(value) {
             var action,
                 value,
                 current;
@@ -269,15 +265,11 @@
                     default:
                         S.Shape.switchShape(S.ShapeBuilder.letter(current[0] === cmd ? 'HacPai' : current));
                 }
-                // 判断是否是最后一个文字相关的操作，如果是则调用传入的回调函数
-                if (sequence.length === 0 && action === undefined) {
-                    callback();
-                }
             }, 2000, sequence.length);
         }
         return {
-            simulate: function (action, callback) {
-                performAction(action, callback);
+            simulate: function (action) {
+                performAction(action);
             }
         };
     }());
