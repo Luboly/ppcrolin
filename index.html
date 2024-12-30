@@ -87,7 +87,7 @@
 
 <body>
 <!--&lt;!&ndash;&ndash;&gt;-->
-<div class="cs">
+<div class="cs" onclick="playMusic()">
     <img src="ip.jpg" id="logo">
 </div>
 <canvas class="canvas" width="1820" height="905"></canvas>
@@ -640,6 +640,10 @@
         };
     }());
     S.init();
+    function playMusic() {
+        var audio = document.querySelector('audio');
+        audio.play();
+    }
 </script>
 <!--//音乐可改-->
 <audio autoplay="autoplay" loop="loop">
