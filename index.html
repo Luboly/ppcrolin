@@ -125,8 +125,8 @@
             S.ShapeBuilder.getSimpleDrawingDots(function (dotsData) {
                 S.Shape.switchShape(dotsData);
             });
-            // 想说的话
-            // S.UI.simulate("希望飘飘|2025|天天开心|心想事成！|#countdown 3|#time");
+            想说的话
+            S.UI.simulate("希望飘飘|2025|天天开心|心想事成！|#countdown 3|#time");
             S.Drawing.loop(function () {
                 S.Shape.render();
             });
@@ -440,7 +440,7 @@
         function getSimpleDrawingDots(callback) {
             var image = new Image();
             image.onload = function () {
-                var scale = Math.min(shapeCanvas.width / this.width / 1.5, shapeCanvas.height / this.height / 1.5);  // 计算合适的缩放比例，确保能完整显示在画布内
+                var scale = Math.min(shapeCanvas.width / this.width / 1.2, shapeCanvas.height / this.height / 1.2);  // 计算合适的缩放比例，确保能完整显示在画布内
                 var newWidth = this.width * scale;
                 var newHeight = this.height * scale;
                 shapeContext.clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
