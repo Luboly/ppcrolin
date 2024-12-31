@@ -87,9 +87,10 @@
 
 <body>
 <!--&lt;!&ndash;&ndash;&gt;-->
-<div class="cs" onclick="document.getElementById('myAudio').play();">
+<div class="cs">
     <img src="ip.jpg" id="logo">
 </div>
+<canvas id="myCanvas"></canvas> <!-- 用于展示简笔画点阵图的canvas元素 -->
 <canvas class="canvas" width="1820" height="905"></canvas>
 <p class="text" style="color: #ed3073;">
     世界已经有你
@@ -640,8 +641,28 @@
         };
     }());
     S.init();
+    // 获取div元素
+    var divElement = document.querySelector('.cs');
+        // 获取canvas元素，假设简笔画点阵图展示在这个canvas上
+    var canvasElement = document.getElementById('myCanvas');
+
+    if (divElement && canvasElement) {
+            // 为div元素添加click事件监听器
+         divElement.addEventListener('click', function () {
+             // 这里调用相关函数来生成和展示简笔画点阵图，以下是示例调用逻辑，具体要根据你实际的函数实现来调整
+            S.ShapeBuilder.getSimpleDrawingDots(function (dotsData) {
+                S.Shape.switchShape(dotsData);
+                // 如果有渲染相关的循环等后续操作，也可以在这里继续调用相应函数确保点阵图持续显示等，比如：
+                // S.Drawing.loop(function () {
+                //     S.Shape.render();
+                // });
+             });
+         });
+     }
 </script>
 <!--//音乐可改-->
-<audio id="myAudio" src="pp.mp3" type="audio/mpeg"></audio>
+<audio autoplay="autoplay" loop="loop">
+    <source src="pp.mp3" type="audio/mpeg">
+</audio>
 </body>
 </html>
